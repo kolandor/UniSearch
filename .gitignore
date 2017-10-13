@@ -1,7 +1,6 @@
 *.exe
 *.pdb
 *.txt
-*.config
 *.inf
 *.manifest
 *.cache

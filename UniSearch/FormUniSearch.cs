@@ -16,5 +16,10 @@ namespace UniSearch
         {
             InitializeComponent();
         }
+
+        private void FormUniSearch_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

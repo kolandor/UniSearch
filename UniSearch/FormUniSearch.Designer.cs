@@ -33,15 +33,15 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanelMain = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanelInpData = new System.Windows.Forms.TableLayoutPanel();
+            this.textBoxSearchString = new System.Windows.Forms.TextBox();
+            this.textBoxThreadsCount = new System.Windows.Forms.TextBox();
+            this.labelSearchString = new System.Windows.Forms.Label();
+            this.labelThreadsCount = new System.Windows.Forms.Label();
+            this.labelSearchCount = new System.Windows.Forms.Label();
+            this.textBoxSearchCount = new System.Windows.Forms.TextBox();
             this.tableLayoutPanelUrl = new System.Windows.Forms.TableLayoutPanel();
             this.labelUrl = new System.Windows.Forms.Label();
             this.textBoxUrl = new System.Windows.Forms.TextBox();
-            this.labelSearchCount = new System.Windows.Forms.Label();
-            this.textBoxSearchCount = new System.Windows.Forms.TextBox();
-            this.labelThreadsCount = new System.Windows.Forms.Label();
-            this.labelSearchString = new System.Windows.Forms.Label();
-            this.textBoxThreadsCount = new System.Windows.Forms.TextBox();
-            this.textBoxSearchString = new System.Windows.Forms.TextBox();
             this.tableLayoutPanelScanInfo = new System.Windows.Forms.TableLayoutPanel();
             this.labelSearchInfo = new System.Windows.Forms.Label();
             this.listBoxSearchInfo = new System.Windows.Forms.ListBox();
@@ -118,6 +118,60 @@
             this.tableLayoutPanelInpData.Size = new System.Drawing.Size(491, 46);
             this.tableLayoutPanelInpData.TabIndex = 0;
             // 
+            // textBoxSearchString
+            // 
+            this.textBoxSearchString.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBoxSearchString.Location = new System.Drawing.Point(239, 22);
+            this.textBoxSearchString.Name = "textBoxSearchString";
+            this.textBoxSearchString.Size = new System.Drawing.Size(249, 20);
+            this.textBoxSearchString.TabIndex = 5;
+            // 
+            // textBoxThreadsCount
+            // 
+            this.textBoxThreadsCount.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBoxThreadsCount.Location = new System.Drawing.Point(121, 22);
+            this.textBoxThreadsCount.Name = "textBoxThreadsCount";
+            this.textBoxThreadsCount.Size = new System.Drawing.Size(112, 20);
+            this.textBoxThreadsCount.TabIndex = 4;
+            // 
+            // labelSearchString
+            // 
+            this.labelSearchString.AutoSize = true;
+            this.labelSearchString.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelSearchString.Location = new System.Drawing.Point(239, 0);
+            this.labelSearchString.Name = "labelSearchString";
+            this.labelSearchString.Size = new System.Drawing.Size(249, 19);
+            this.labelSearchString.TabIndex = 3;
+            this.labelSearchString.Text = "Search String";
+            // 
+            // labelThreadsCount
+            // 
+            this.labelThreadsCount.AutoSize = true;
+            this.labelThreadsCount.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelThreadsCount.Location = new System.Drawing.Point(121, 0);
+            this.labelThreadsCount.Name = "labelThreadsCount";
+            this.labelThreadsCount.Size = new System.Drawing.Size(112, 19);
+            this.labelThreadsCount.TabIndex = 2;
+            this.labelThreadsCount.Text = "Threads Count";
+            // 
+            // labelSearchCount
+            // 
+            this.labelSearchCount.AutoSize = true;
+            this.labelSearchCount.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelSearchCount.Location = new System.Drawing.Point(3, 0);
+            this.labelSearchCount.Name = "labelSearchCount";
+            this.labelSearchCount.Size = new System.Drawing.Size(112, 19);
+            this.labelSearchCount.TabIndex = 0;
+            this.labelSearchCount.Text = "URL Search Count";
+            // 
+            // textBoxSearchCount
+            // 
+            this.textBoxSearchCount.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBoxSearchCount.Location = new System.Drawing.Point(3, 22);
+            this.textBoxSearchCount.Name = "textBoxSearchCount";
+            this.textBoxSearchCount.Size = new System.Drawing.Size(112, 20);
+            this.textBoxSearchCount.TabIndex = 1;
+            // 
             // tableLayoutPanelUrl
             // 
             this.tableLayoutPanelUrl.ColumnCount = 1;
@@ -150,60 +204,6 @@
             this.textBoxUrl.Name = "textBoxUrl";
             this.textBoxUrl.Size = new System.Drawing.Size(485, 20);
             this.textBoxUrl.TabIndex = 1;
-            // 
-            // labelSearchCount
-            // 
-            this.labelSearchCount.AutoSize = true;
-            this.labelSearchCount.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelSearchCount.Location = new System.Drawing.Point(3, 0);
-            this.labelSearchCount.Name = "labelSearchCount";
-            this.labelSearchCount.Size = new System.Drawing.Size(112, 19);
-            this.labelSearchCount.TabIndex = 0;
-            this.labelSearchCount.Text = "URL Search Count";
-            // 
-            // textBoxSearchCount
-            // 
-            this.textBoxSearchCount.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxSearchCount.Location = new System.Drawing.Point(3, 22);
-            this.textBoxSearchCount.Name = "textBoxSearchCount";
-            this.textBoxSearchCount.Size = new System.Drawing.Size(112, 20);
-            this.textBoxSearchCount.TabIndex = 1;
-            // 
-            // labelThreadsCount
-            // 
-            this.labelThreadsCount.AutoSize = true;
-            this.labelThreadsCount.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelThreadsCount.Location = new System.Drawing.Point(121, 0);
-            this.labelThreadsCount.Name = "labelThreadsCount";
-            this.labelThreadsCount.Size = new System.Drawing.Size(112, 19);
-            this.labelThreadsCount.TabIndex = 2;
-            this.labelThreadsCount.Text = "Threads Count";
-            // 
-            // labelSearchString
-            // 
-            this.labelSearchString.AutoSize = true;
-            this.labelSearchString.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelSearchString.Location = new System.Drawing.Point(239, 0);
-            this.labelSearchString.Name = "labelSearchString";
-            this.labelSearchString.Size = new System.Drawing.Size(249, 19);
-            this.labelSearchString.TabIndex = 3;
-            this.labelSearchString.Text = "Search String";
-            // 
-            // textBoxThreadsCount
-            // 
-            this.textBoxThreadsCount.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxThreadsCount.Location = new System.Drawing.Point(121, 22);
-            this.textBoxThreadsCount.Name = "textBoxThreadsCount";
-            this.textBoxThreadsCount.Size = new System.Drawing.Size(112, 20);
-            this.textBoxThreadsCount.TabIndex = 4;
-            // 
-            // textBoxSearchString
-            // 
-            this.textBoxSearchString.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxSearchString.Location = new System.Drawing.Point(239, 22);
-            this.textBoxSearchString.Name = "textBoxSearchString";
-            this.textBoxSearchString.Size = new System.Drawing.Size(249, 20);
-            this.textBoxSearchString.TabIndex = 5;
             // 
             // tableLayoutPanelScanInfo
             // 
@@ -320,6 +320,7 @@
             this.MaximizeBox = false;
             this.Name = "FormUniSearch";
             this.Text = "UniSearch";
+            this.Load += new System.EventHandler(this.FormUniSearch_Load);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
             this.tableLayoutPanelMain.ResumeLayout(false);

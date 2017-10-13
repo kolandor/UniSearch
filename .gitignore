@@ -4,6 +4,6 @@
 *.inf
 *.manifest
 *.cache
-/UniSearch/bin/Debug/*
+/UniSearch/bin/*
 /UniSearch/obj/Debug/*
 /UniSearch/.vs/UniSearch/v14/.suo

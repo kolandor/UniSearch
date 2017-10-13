@@ -1,0 +1,10 @@
+*.exe
+*.pdb
+*.txt
+*.config
+*.inf
+*.manifest
+*.cache
+/UniSearch/bin/Debug/*
+/UniSearch/obj/Debug/*
+/UniSearch/.vs/UniSearch/v14/.suo

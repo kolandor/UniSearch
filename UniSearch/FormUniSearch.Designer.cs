@@ -290,6 +290,7 @@
             // buttonStartStop
             // 
             this.buttonStartStop.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonStartStop.Enabled = false;
             this.buttonStartStop.Location = new System.Drawing.Point(360, 3);
             this.buttonStartStop.Name = "buttonStartStop";
             this.buttonStartStop.Size = new System.Drawing.Size(128, 22);
@@ -300,6 +301,7 @@
             // buttonPause
             // 
             this.buttonPause.Dock = System.Windows.Forms.DockStyle.Right;
+            this.buttonPause.Enabled = false;
             this.buttonPause.Location = new System.Drawing.Point(226, 3);
             this.buttonPause.Name = "buttonPause";
             this.buttonPause.Size = new System.Drawing.Size(128, 22);

@@ -5,6 +5,14 @@ namespace UniSearch
 {
     public class UniSearchCore
     {
+        //Working stable regular expressions
+        //Public pattern
+        //Regex regex = new Regex(@"((http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?)");
+        //My complicated pattern
+        //Regex regex = new Regex(@"https?://[\w\d\-_]+(\.[\w\d\-_]+)+[\w\d\-\.,@?^=%&amp;:/~\+#]*");
+        //My simple pattern
+        //Regex regex = new Regex(@"https?://[\w\d-\._~:/?#\[\]@!$&'()*+,;=`]+");
+
         private ListView _searchInfoListView;
 
         private Thread _mainThread = null;

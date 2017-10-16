@@ -7,7 +7,7 @@ namespace UniSearch
     public partial class FormUniSearch : Form
     {
         private ValidationHandler _validator;
-
+        
         public FormUniSearch()
         {
             InitializeComponent();
@@ -25,6 +25,11 @@ namespace UniSearch
             _validator.Registration(textBoxSearchCount, ValidationHandler.ValidationMethod.CurrentDigits);
             _validator.Registration(textBoxThreadsCount, ValidationHandler.ValidationMethod.ThreadsCount);
             _validator.Registration(textBoxSearchString, ValidationHandler.ValidationMethod.NotEmpty);
+        }
+
+        private void buttonStartStop_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

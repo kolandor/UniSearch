@@ -44,13 +44,13 @@
             this.textBoxUrl = new System.Windows.Forms.TextBox();
             this.tableLayoutPanelScanInfo = new System.Windows.Forms.TableLayoutPanel();
             this.labelSearchInfo = new System.Windows.Forms.Label();
-            this.listBoxSearchInfo = new System.Windows.Forms.ListBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.labelProgress = new System.Windows.Forms.Label();
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.tableLayoutPanelControlButtons = new System.Windows.Forms.TableLayoutPanel();
             this.buttonStartStop = new System.Windows.Forms.Button();
             this.buttonPause = new System.Windows.Forms.Button();
+            this.listViewSearchInfo = new System.Windows.Forms.ListView();
             this.menuStrip.SuspendLayout();
             this.tableLayoutPanelMain.SuspendLayout();
             this.tableLayoutPanelInpData.SuspendLayout();
@@ -210,7 +210,7 @@
             this.tableLayoutPanelScanInfo.ColumnCount = 1;
             this.tableLayoutPanelScanInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanelScanInfo.Controls.Add(this.labelSearchInfo, 0, 0);
-            this.tableLayoutPanelScanInfo.Controls.Add(this.listBoxSearchInfo, 0, 1);
+            this.tableLayoutPanelScanInfo.Controls.Add(this.listViewSearchInfo, 0, 1);
             this.tableLayoutPanelScanInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanelScanInfo.Location = new System.Drawing.Point(3, 101);
             this.tableLayoutPanelScanInfo.Name = "tableLayoutPanelScanInfo";
@@ -229,15 +229,6 @@
             this.labelSearchInfo.Size = new System.Drawing.Size(485, 17);
             this.labelSearchInfo.TabIndex = 0;
             this.labelSearchInfo.Text = "Search Information";
-            // 
-            // listBoxSearchInfo
-            // 
-            this.listBoxSearchInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listBoxSearchInfo.FormattingEnabled = true;
-            this.listBoxSearchInfo.Location = new System.Drawing.Point(3, 20);
-            this.listBoxSearchInfo.Name = "listBoxSearchInfo";
-            this.listBoxSearchInfo.Size = new System.Drawing.Size(485, 92);
-            this.listBoxSearchInfo.TabIndex = 1;
             // 
             // tableLayoutPanel1
             // 
@@ -297,6 +288,7 @@
             this.buttonStartStop.TabIndex = 0;
             this.buttonStartStop.Text = "START";
             this.buttonStartStop.UseVisualStyleBackColor = true;
+            this.buttonStartStop.Click += new System.EventHandler(this.buttonStartStop_Click);
             // 
             // buttonPause
             // 
@@ -308,6 +300,16 @@
             this.buttonPause.TabIndex = 1;
             this.buttonPause.Text = "PAUSE";
             this.buttonPause.UseVisualStyleBackColor = true;
+            // 
+            // listViewSearchInfo
+            // 
+            this.listViewSearchInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listViewSearchInfo.Location = new System.Drawing.Point(3, 20);
+            this.listViewSearchInfo.Name = "listViewSearchInfo";
+            this.listViewSearchInfo.Size = new System.Drawing.Size(485, 92);
+            this.listViewSearchInfo.TabIndex = 1;
+            this.listViewSearchInfo.UseCompatibleStateImageBehavior = false;
+            this.listViewSearchInfo.View = System.Windows.Forms.View.Tile;
             // 
             // FormUniSearch
             // 
@@ -357,13 +359,13 @@
         private System.Windows.Forms.TextBox textBoxSearchCount;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelScanInfo;
         private System.Windows.Forms.Label labelSearchInfo;
-        private System.Windows.Forms.ListBox listBoxSearchInfo;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Label labelProgress;
         private System.Windows.Forms.ProgressBar progressBar;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelControlButtons;
         private System.Windows.Forms.Button buttonStartStop;
         private System.Windows.Forms.Button buttonPause;
+        private System.Windows.Forms.ListView listViewSearchInfo;
     }
 }
 

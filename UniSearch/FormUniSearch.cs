@@ -7,7 +7,9 @@ namespace UniSearch
     public partial class FormUniSearch : Form
     {
         private ValidationHandler _validator;
-        
+
+        private UniSearchCore _searchCore;
+
         public FormUniSearch()
         {
             InitializeComponent();
@@ -15,7 +17,24 @@ namespace UniSearch
 
         private void FormUniSearch_Load(object sender, EventArgs e)
         {
-            RegisterValidationControls();
+            try
+            {
+                _searchCore = new UniSearchCore(listViewSearchInfo, ProgressBarUp);
+
+                RegisterValidationControls();
+            }
+            catch (Exception exception)
+            {
+                DialogResult result = MessageBox.Show($"Critical error: {exception.Message}\nRestart App?", @"Error", MessageBoxButtons.YesNo);
+                if (result == DialogResult.Yes)
+                {
+                    Application.Restart();
+                }
+                else
+                {
+                    Application.Exit();
+                }
+            }
         }
 
         private void RegisterValidationControls()
@@ -29,7 +48,36 @@ namespace UniSearch
 
         private void buttonStartStop_Click(object sender, EventArgs e)
         {
+            try
+            {
+                Start();
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show($"Error: {exception.Message}", @"Error");
+            }
+        }
 
+        private void Start()
+        {
+            listViewSearchInfo.Items.Clear();
+
+            int targetDeep = int.Parse(textBoxSearchCount.Text);
+
+            progressBar.Maximum = targetDeep;
+
+            _searchCore.Start(textBoxUrl.Text, targetDeep,
+                int.Parse(textBoxThreadsCount.Text), textBoxSearchString.Text);
+        }
+
+        private void ProgressBarUp(int newValue)
+        {
+            if (newValue == -1)
+            {
+                progressBar.Value = progressBar.Maximum;
+                return;
+            }
+            progressBar.Value = newValue > progressBar.Maximum ? progressBar.Maximum : newValue;
         }
     }
 }

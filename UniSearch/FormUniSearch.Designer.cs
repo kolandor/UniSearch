@@ -44,13 +44,13 @@
             this.textBoxUrl = new System.Windows.Forms.TextBox();
             this.tableLayoutPanelScanInfo = new System.Windows.Forms.TableLayoutPanel();
             this.labelSearchInfo = new System.Windows.Forms.Label();
+            this.listViewSearchInfo = new System.Windows.Forms.ListView();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.labelProgress = new System.Windows.Forms.Label();
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.tableLayoutPanelControlButtons = new System.Windows.Forms.TableLayoutPanel();
             this.buttonStartStop = new System.Windows.Forms.Button();
             this.buttonPause = new System.Windows.Forms.Button();
-            this.listViewSearchInfo = new System.Windows.Forms.ListView();
             this.menuStrip.SuspendLayout();
             this.tableLayoutPanelMain.SuspendLayout();
             this.tableLayoutPanelInpData.SuspendLayout();
@@ -230,6 +230,16 @@
             this.labelSearchInfo.TabIndex = 0;
             this.labelSearchInfo.Text = "Search Information";
             // 
+            // listViewSearchInfo
+            // 
+            this.listViewSearchInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listViewSearchInfo.Location = new System.Drawing.Point(3, 20);
+            this.listViewSearchInfo.Name = "listViewSearchInfo";
+            this.listViewSearchInfo.Size = new System.Drawing.Size(485, 92);
+            this.listViewSearchInfo.TabIndex = 1;
+            this.listViewSearchInfo.UseCompatibleStateImageBehavior = false;
+            this.listViewSearchInfo.View = System.Windows.Forms.View.Tile;
+            // 
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 1;
@@ -300,16 +310,6 @@
             this.buttonPause.TabIndex = 1;
             this.buttonPause.Text = "PAUSE";
             this.buttonPause.UseVisualStyleBackColor = true;
-            // 
-            // listViewSearchInfo
-            // 
-            this.listViewSearchInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listViewSearchInfo.Location = new System.Drawing.Point(3, 20);
-            this.listViewSearchInfo.Name = "listViewSearchInfo";
-            this.listViewSearchInfo.Size = new System.Drawing.Size(485, 92);
-            this.listViewSearchInfo.TabIndex = 1;
-            this.listViewSearchInfo.UseCompatibleStateImageBehavior = false;
-            this.listViewSearchInfo.View = System.Windows.Forms.View.Tile;
             // 
             // FormUniSearch
             // 

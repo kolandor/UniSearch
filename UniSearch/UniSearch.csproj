@@ -55,6 +55,7 @@
     <Compile Include="FormUniSearch.Designer.cs">
       <DependentUpon>FormUniSearch.cs</DependentUpon>
     </Compile>
+    <Compile Include="OngoingThread.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UniSearchCore.cs" />

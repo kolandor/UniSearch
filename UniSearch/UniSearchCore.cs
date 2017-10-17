@@ -11,21 +11,32 @@ namespace UniSearch
 {
     public class UniSearchCore
     {
-        private ListView _searchInfoListView;
+        public delegate void ProrgressBarUp(int newValue);
 
-        private object _criticalSection = true;
+        private readonly ListView _searchInfoListView;
+        
+        private readonly ProrgressBarUp _prorgressBarUp;
+
+        private readonly object _criticalSection = true;
 
         private Thread _mainThread;
 
-        public UniSearchCore(ListView listView)
+        private int _targetDeep;
+
+        public UniSearchCore(ListView listView, ProrgressBarUp prorgressBarUp)
         {
+            _prorgressBarUp = prorgressBarUp;
             _searchInfoListView = listView;
         }
 
         public void Start(string urlRoot, int targetDeep, int threadCount, string searchString)
         {
-            Tuple<string, int, int, string> tuple = 
-                new Tuple<string, int, int, string>(urlRoot, targetDeep, threadCount, searchString);
+            _targetDeep = targetDeep;
+
+            Tuple<string, int, string> tuple = 
+                new Tuple<string, int, string>
+                (urlRoot, threadCount, searchString);
+
             _mainThread = new Thread(Process) { IsBackground = true };
             _mainThread.Start(tuple);
         }
@@ -48,7 +59,7 @@ namespace UniSearch
         {
             try
             {
-                Tuple<string, int, int, string> paramsTuple = objTupleParams as Tuple<string, int, int, string>;
+                Tuple<string,  int, string> paramsTuple = objTupleParams as Tuple<string, int, string>;
 
                 if (paramsTuple == null)
                 {
@@ -56,9 +67,8 @@ namespace UniSearch
                 }
 
                 string urlRoot = paramsTuple.Item1;
-                int targetDeep = paramsTuple.Item2;
-                int threadCount = paramsTuple.Item3;
-                string searchString = paramsTuple.Item4;
+                int threadCount = paramsTuple.Item2;
+                string searchString = paramsTuple.Item3;
 
                 List<OngoingThread> poolThreads = new List<OngoingThread>();
 
@@ -69,8 +79,8 @@ namespace UniSearch
 
                 List<string> scanned = new List<string>();
                 List<string> scan = new List<string> { urlRoot };
-
-                while (scan.Count > 0 && scanned.Count <= targetDeep)
+                
+                while (scan.Count > 0 && scanned.Count <= _targetDeep)
                 {
                     List<string> nextScan = new List<string>();
 
@@ -82,13 +92,28 @@ namespace UniSearch
                         poolThreads[i % poolThreads.Count].Start(tupleScanData);
                     }
 
+                    //wait for scan level
                     foreach (OngoingThread thread in poolThreads)
                     {
                         thread.Join();
                     }
 
+                    _prorgressBarUp.Invoke(scanned.Count);
+
+                    if (nextScan.Count + scanned.Count > _targetDeep)
+                    {
+                        nextScan.RemoveRange(0, nextScan.Count + scanned.Count - _targetDeep);
+                    }
+
                     scan = nextScan;
                 }
+
+                foreach (OngoingThread thread in poolThreads)
+                {
+                    thread.Stop();
+                }
+
+                _prorgressBarUp.Invoke(-1);
             }
             catch (Exception exception)
             {
@@ -99,12 +124,7 @@ namespace UniSearch
         void SearchMethod(object objTupleParams)
         {
             ListViewItem item = new ListViewItem();
-
-            lock (_criticalSection)
-            {
-                _searchInfoListView.Items.Add(item);
-            }
-
+            
             try
             {
                 Tuple<string, List<string>, List<string>, string> paramsTuple = 
@@ -113,6 +133,16 @@ namespace UniSearch
                 if (paramsTuple == null)
                 {
                     throw new Exception("Wrong thread search params.");
+                }
+
+                //if (paramsTuple.Item2.Count >= _targetDeep)
+                //{
+                //    return;
+                //}
+
+                lock (_criticalSection)
+                {
+                    _searchInfoListView.Items.Add(item);
                 }
 
                 string currentUrl = paramsTuple.Item1;

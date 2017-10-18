@@ -19,7 +19,7 @@ namespace UniSearch
         {
             try
             {
-                _searchCore = new UniSearchCore(listViewSearchInfo, ProgressBarUp);
+                _searchCore = new UniSearchCore(this, listViewSearchInfo, progressBar);
 
                 RegisterValidationControls();
             }
@@ -70,14 +70,5 @@ namespace UniSearch
                 int.Parse(textBoxThreadsCount.Text), textBoxSearchString.Text);
         }
 
-        private void ProgressBarUp(int newValue)
-        {
-            if (newValue == -1)
-            {
-                progressBar.Value = progressBar.Maximum;
-                return;
-            }
-            progressBar.Value = newValue > progressBar.Maximum ? progressBar.Maximum : newValue;
-        }
     }
 }

@@ -11,11 +11,11 @@ namespace UniSearch
 {
     public class UniSearchCore
     {
-        public delegate void ProrgressBarUp(int newValue);
+        private readonly FormUniSearch _uniSearch;
 
         private readonly ListView _searchInfoListView;
-        
-        private readonly ProrgressBarUp _prorgressBarUp;
+
+        private readonly ProgressBar _prorgressBar;
 
         private readonly object _criticalSection = true;
 
@@ -23,9 +23,10 @@ namespace UniSearch
 
         private int _targetDeep;
 
-        public UniSearchCore(ListView listView, ProrgressBarUp prorgressBarUp)
+        public UniSearchCore(FormUniSearch uniSearch, ListView listView, ProgressBar prorgressBar)
         {
-            _prorgressBarUp = prorgressBarUp;
+            _uniSearch = uniSearch;
+            _prorgressBar = prorgressBar;
             _searchInfoListView = listView;
         }
 
@@ -33,7 +34,7 @@ namespace UniSearch
         {
             _targetDeep = targetDeep;
 
-            Tuple<string, int, string> tuple = 
+            Tuple<string, int, string> tuple =
                 new Tuple<string, int, string>
                 (urlRoot, threadCount, searchString);
 
@@ -59,7 +60,7 @@ namespace UniSearch
         {
             try
             {
-                Tuple<string,  int, string> paramsTuple = objTupleParams as Tuple<string, int, string>;
+                Tuple<string, int, string> paramsTuple = objTupleParams as Tuple<string, int, string>;
 
                 if (paramsTuple == null)
                 {
@@ -79,33 +80,10 @@ namespace UniSearch
 
                 List<string> scanned = new List<string>();
                 List<string> scan = new List<string> { urlRoot };
-                
+
                 while (scan.Count > 0 && scanned.Count <= _targetDeep)
                 {
-                    List<string> nextScan = new List<string>();
-
-                    for (int i = 0; i < scan.Count; i++)
-                    {
-                        Tuple<string, List<string>, List<string>, string> tupleScanData =
-                            new Tuple<string, List<string>, List<string>, string>(scan[i], scanned, nextScan, searchString);
-
-                        poolThreads[i % poolThreads.Count].Start(tupleScanData);
-                    }
-
-                    //wait for scan level
-                    foreach (OngoingThread thread in poolThreads)
-                    {
-                        thread.Join();
-                    }
-
-                    _prorgressBarUp.Invoke(scanned.Count);
-
-                    if (nextScan.Count + scanned.Count > _targetDeep)
-                    {
-                        nextScan.RemoveRange(0, nextScan.Count + scanned.Count - _targetDeep);
-                    }
-
-                    scan = nextScan;
+                    scan = ScanLevel(poolThreads, scan, scanned, searchString);
                 }
 
                 foreach (OngoingThread thread in poolThreads)
@@ -113,7 +91,13 @@ namespace UniSearch
                     thread.Stop();
                 }
 
-                _prorgressBarUp.Invoke(-1);
+                lock (_criticalSection)
+                {
+                    _uniSearch.Invoke((MethodInvoker)delegate
+                    {
+                        _prorgressBar.Value = _prorgressBar.Maximum;
+                    });
+                }
             }
             catch (Exception exception)
             {
@@ -121,13 +105,47 @@ namespace UniSearch
             }
         }
 
+        List<string> ScanLevel(List<OngoingThread> poolThreads, List<string> scan, List<string> scanned, string searchString)
+        {
+            List<string> nextScan = new List<string>();
+
+            for (int i = 0; i < scan.Count; i++)
+            {
+                Tuple<string, List<string>, List<string>, string> tupleScanData =
+                    new Tuple<string, List<string>, List<string>, string>(scan[i], scanned, nextScan, searchString);
+
+                poolThreads[i % poolThreads.Count].Start(tupleScanData);
+            }
+
+            //wait for scan level
+            foreach (OngoingThread thread in poolThreads)
+            {
+                thread.Join();
+            }
+
+            lock (_criticalSection)
+            {
+                _uniSearch.Invoke((MethodInvoker)delegate
+                {
+                    _prorgressBar.Value = scanned.Count > _prorgressBar.Maximum ? _prorgressBar.Maximum : scanned.Count;
+                });
+            }
+
+            if (nextScan.Count + scanned.Count > _targetDeep)
+            {
+                nextScan.RemoveRange(0, nextScan.Count + scanned.Count - _targetDeep);
+            }
+
+            return nextScan;
+        } 
+
         void SearchMethod(object objTupleParams)
         {
             ListViewItem item = new ListViewItem();
-            
+
             try
             {
-                Tuple<string, List<string>, List<string>, string> paramsTuple = 
+                Tuple<string, List<string>, List<string>, string> paramsTuple =
                     objTupleParams as Tuple<string, List<string>, List<string>, string>;
 
                 if (paramsTuple == null)
@@ -135,61 +153,47 @@ namespace UniSearch
                     throw new Exception("Wrong thread search params.");
                 }
 
-                //if (paramsTuple.Item2.Count >= _targetDeep)
-                //{
-                //    return;
-                //}
-
-                lock (_criticalSection)
-                {
-                    _searchInfoListView.Items.Add(item);
-                }
-
                 string currentUrl = paramsTuple.Item1;
                 List<string> scanned = paramsTuple.Item2;
                 List<string> nextScan = paramsTuple.Item3;
                 string searchString = paramsTuple.Item4;
+                
+                lock (_criticalSection)
+                {
+                    _uniSearch.Invoke((MethodInvoker)delegate
+                    {
+                        _searchInfoListView.Items.Add(item);
+                    });
+                }
 
-                item.Text += currentUrl;
-
+                //set of the researched url
+                lock (_criticalSection)
+                {
+                    _uniSearch.Invoke((MethodInvoker)delegate
+                    {
+                        item.Text += currentUrl;
+                    });
+                }
+                
                 lock (_criticalSection)
                 {
                     scanned.Add(currentUrl);
                 }
 
-                string html = string.Empty;
-
-                HttpWebRequest request = WebRequest.CreateHttp(currentUrl);
-                using (WebResponse response = request.GetResponse())
-                {
-                    Stream stream = response.GetResponseStream();
-                    if (stream == null)
-                    {
-                        throw new Exception("can't get web page.");
-                    }
-                    using (StreamReader reader = new StreamReader(stream))
-                    {
-                        html = reader.ReadToEnd();
-                        if (html.Length == 0)
-                        {
-                            throw new Exception("can't get web page html.");
-                        }
-                    }
-                    stream.Close();
-                }
-
+                string html = GetHtml(currentUrl);
+                
                 html = html.ToLower();
 
-                item.Text += @" Concurrences: " + Regex.Matches(html, searchString.ToLower()).Count;
+                int coutnConcurrences = Regex.Matches(html, searchString.ToLower()).Count;
 
-                //Working stable regular expressions
-                //Public pattern
-                //Regex regex = new Regex(@"((http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?)");
-                //My complicated pattern
-                //Regex regex = new Regex(@"https?://[\w\d\-_]+(\.[\w\d\-_]+)+[\w\d\-\.,@?^=%&amp;:/~\+#]*");
-                //My simple pattern
-                //Regex regex = new Regex(@"https?://[\w\d-\._~:/?#\[\]@!$&'()*+,;=`]+");
-
+                lock (_criticalSection)
+                {
+                    _uniSearch.Invoke((MethodInvoker)delegate
+                    {
+                        item.Text += @" Concurrences: " + coutnConcurrences;
+                    });
+                }
+                
                 Regex regex = new Regex(@"https?://[\w\d\-_]+(\.[\w\d\-_]+)+[\w\d\-\.,@?^=%&amp;:/~\+#]*");
 
                 MatchCollection matches = regex.Matches(html);
@@ -201,8 +205,38 @@ namespace UniSearch
             }
             catch (Exception exception)
             {
-                item.Text += @" Search error: " + exception.Message;
+                lock (_criticalSection)
+                {
+                    _uniSearch.Invoke((MethodInvoker)delegate
+                    {
+                        item.Text += @" Search error: " + exception.Message;
+                    });
+                }
             }
+        }
+
+        private string GetHtml(string currentUrl)
+        {
+            string html;
+            HttpWebRequest request = WebRequest.CreateHttp(currentUrl);
+            using (WebResponse response = request.GetResponse())
+            {
+                Stream stream = response.GetResponseStream();
+                if (stream == null)
+                {
+                    throw new Exception("can't get web page.");
+                }
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    html = reader.ReadToEnd();
+                    if (html.Length == 0)
+                    {
+                        throw new Exception("can't get web page html.");
+                    }
+                }
+                stream.Close();
+            }
+            return html;
         }
     }
 }

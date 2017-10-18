@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -11,9 +10,9 @@ namespace UniSearch
 
         private UniSearchCore _searchCore;
 
-        private bool _isStart = false;
+        private bool _isStart;
 
-        private bool _isPaused = false;
+        private bool _isPaused;
 
         public FormUniSearch()
         {
@@ -24,6 +23,10 @@ namespace UniSearch
         {
             try
             {
+                _isStart = false;
+
+                _isPaused = false;
+
                 _searchCore = new UniSearchCore(this, listViewSearchInfo, progressBar);
 
                 _searchCore.FinishScan += () => { Invoke((MethodInvoker) Stop); };
@@ -152,6 +155,11 @@ namespace UniSearch
             {
                 MessageBox.Show($"Error: {exception.Message}", @"Error");
             }
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(@"This App search string on web site. Use async Breadth-first search");
         }
     }
 }

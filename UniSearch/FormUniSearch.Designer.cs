@@ -51,6 +51,7 @@
             this.tableLayoutPanelControlButtons = new System.Windows.Forms.TableLayoutPanel();
             this.buttonStartStop = new System.Windows.Forms.Button();
             this.buttonPauseResume = new System.Windows.Forms.Button();
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.tableLayoutPanelMain.SuspendLayout();
             this.tableLayoutPanelInpData.SuspendLayout();
@@ -72,6 +73,8 @@
             // 
             // fileToolStripMenuItem
             // 
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.aboutToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
@@ -312,6 +315,13 @@
             this.buttonPauseResume.UseVisualStyleBackColor = true;
             this.buttonPauseResume.Click += new System.EventHandler(this.buttonPauseResume_Click);
             // 
+            // aboutToolStripMenuItem
+            // 
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aboutToolStripMenuItem.Text = "About";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
+            // 
             // FormUniSearch
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -367,6 +377,7 @@
         private System.Windows.Forms.Button buttonStartStop;
         private System.Windows.Forms.Button buttonPauseResume;
         private System.Windows.Forms.ListView listViewSearchInfo;
+        private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
     }
 }
 

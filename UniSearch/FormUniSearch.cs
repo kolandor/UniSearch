@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -10,6 +11,10 @@ namespace UniSearch
 
         private UniSearchCore _searchCore;
 
+        private bool _isStart = false;
+
+        private bool _isPaused = false;
+
         public FormUniSearch()
         {
             InitializeComponent();
@@ -20,6 +25,8 @@ namespace UniSearch
             try
             {
                 _searchCore = new UniSearchCore(this, listViewSearchInfo, progressBar);
+
+                _searchCore.FinishScan += () => { Invoke((MethodInvoker) Stop); };
 
                 RegisterValidationControls();
             }
@@ -50,7 +57,14 @@ namespace UniSearch
         {
             try
             {
-                Start();
+                if (!_isStart)
+                {
+                    Start();
+                }
+                else
+                {
+                    Stop();
+                }
             }
             catch (Exception exception)
             {
@@ -60,15 +74,84 @@ namespace UniSearch
 
         private void Start()
         {
-            listViewSearchInfo.Items.Clear();
+            try
+            {
+                listViewSearchInfo.Items.Clear();
 
-            int targetDeep = int.Parse(textBoxSearchCount.Text);
+                int targetDeep = int.Parse(textBoxSearchCount.Text);
 
-            progressBar.Maximum = targetDeep;
+                progressBar.Maximum = targetDeep;
 
-            _searchCore.Start(textBoxUrl.Text, targetDeep,
-                int.Parse(textBoxThreadsCount.Text), textBoxSearchString.Text);
+                _searchCore.Start(textBoxUrl.Text, targetDeep,
+                    int.Parse(textBoxThreadsCount.Text), textBoxSearchString.Text);
+
+                TextBoxesEnabler(false);
+
+                buttonStartStop.Text = @"STOP";
+
+                buttonPauseResume.Enabled = true;
+
+                _isStart = true;
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show($"Error: {exception.Message}", @"Error");
+            }
         }
 
+        private void Stop()
+        {
+            try
+            {
+                _searchCore.Stop();
+
+                TextBoxesEnabler(true);
+
+                buttonStartStop.Text = @"START";
+
+                progressBar.Value = 0;
+
+                _isStart = false;
+
+                buttonPauseResume.Enabled = false;
+                _isPaused = false;
+                _searchCore.Resume();
+                buttonPauseResume.Text = @"PAUSE";
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show($"Error: {exception.Message}", @"Error");
+            }
+        }
+
+        private void TextBoxesEnabler(bool state)
+        {
+            textBoxSearchCount.Enabled = state;
+            textBoxUrl.Enabled = state;
+            textBoxSearchString.Enabled = state;
+            textBoxThreadsCount.Enabled = state;
+        }
+
+        private void buttonPauseResume_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!_isPaused)
+                {
+                    _searchCore.Pause();
+                    buttonPauseResume.Text = @"RESUME";
+                }
+                else
+                {
+                    _searchCore.Resume();
+                    buttonPauseResume.Text = @"PAUSE";
+                }
+                _isPaused = !_isPaused;
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show($"Error: {exception.Message}", @"Error");
+            }
+        }
     }
 }

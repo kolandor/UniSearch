@@ -23,11 +23,17 @@ namespace UniSearch
 
         private int _targetDeep;
 
+        private bool _isStop;
+
+        private ManualResetEvent _pauseResetEvent;
+
         public UniSearchCore(FormUniSearch uniSearch, ListView listView, ProgressBar prorgressBar)
         {
+            _isStop = true;
             _uniSearch = uniSearch;
             _prorgressBar = prorgressBar;
             _searchInfoListView = listView;
+            _pauseResetEvent = new ManualResetEvent(true);
         }
 
         public void Start(string urlRoot, int targetDeep, int threadCount, string searchString)
@@ -47,17 +53,29 @@ namespace UniSearch
             if (_mainThread != null)
             {
                 _mainThread.Abort();
+
                 _mainThread = null;
             }
         }
 
         public void Pause()
         {
-
+            _pauseResetEvent.Reset();
         }
+
+        public void Resume()
+        {
+            _pauseResetEvent.Set();
+        }
+
+        public event Action FinishScan;
 
         void Process(object objTupleParams)
         {
+            List<OngoingThread> poolThreads = null;
+
+            _isStop = false;
+
             try
             {
                 Tuple<string, int, string> paramsTuple = objTupleParams as Tuple<string, int, string>;
@@ -71,7 +89,7 @@ namespace UniSearch
                 int threadCount = paramsTuple.Item2;
                 string searchString = paramsTuple.Item3;
 
-                List<OngoingThread> poolThreads = new List<OngoingThread>();
+                poolThreads = new List<OngoingThread>();
 
                 for (int i = 0; i < threadCount; i++)
                 {
@@ -83,25 +101,42 @@ namespace UniSearch
 
                 while (scan.Count > 0 && scanned.Count <= _targetDeep)
                 {
+                    _pauseResetEvent.WaitOne();
                     scan = ScanLevel(poolThreads, scan, scanned, searchString);
-                }
-
-                foreach (OngoingThread thread in poolThreads)
-                {
-                    thread.Stop();
                 }
 
                 lock (_criticalSection)
                 {
                     _uniSearch.Invoke((MethodInvoker)delegate
-                    {
-                        _prorgressBar.Value = _prorgressBar.Maximum;
-                    });
+                   {
+                       _prorgressBar.Value = _prorgressBar.Maximum;
+                   });
                 }
+            }
+            catch (ThreadAbortException)
+            {
+                //ignore
             }
             catch (Exception exception)
             {
+                //if (!(Exception is ThreadAbortException))
+                //{
                 MessageBox.Show(exception.Message);
+                //}
+            }
+            finally
+            {
+                _isStop = true;
+
+                if (poolThreads != null)
+                {
+                    foreach (OngoingThread thread in poolThreads)
+                    {
+                        thread.Stop();
+                    }
+                }
+                _mainThread = null;
+                OnFinishScan();
             }
         }
 
@@ -114,6 +149,8 @@ namespace UniSearch
                 Tuple<string, List<string>, List<string>, string> tupleScanData =
                     new Tuple<string, List<string>, List<string>, string>(scan[i], scanned, nextScan, searchString);
 
+                _pauseResetEvent.WaitOne();
+
                 poolThreads[i % poolThreads.Count].Start(tupleScanData);
             }
 
@@ -123,24 +160,18 @@ namespace UniSearch
                 thread.Join();
             }
 
-            lock (_criticalSection)
-            {
-                _uniSearch.Invoke((MethodInvoker)delegate
-                {
-                    _prorgressBar.Value = scanned.Count > _prorgressBar.Maximum ? _prorgressBar.Maximum : scanned.Count;
-                });
-            }
-
             if (nextScan.Count + scanned.Count > _targetDeep)
             {
                 nextScan.RemoveRange(0, nextScan.Count + scanned.Count - _targetDeep);
             }
 
             return nextScan;
-        } 
+        }
 
         void SearchMethod(object objTupleParams)
         {
+            _pauseResetEvent.WaitOne();
+
             ListViewItem item = new ListViewItem();
 
             try
@@ -157,10 +188,10 @@ namespace UniSearch
                 List<string> scanned = paramsTuple.Item2;
                 List<string> nextScan = paramsTuple.Item3;
                 string searchString = paramsTuple.Item4;
-                
+
                 lock (_criticalSection)
                 {
-                    _uniSearch.Invoke((MethodInvoker)delegate
+                    _uniSearch.Invoke((MethodInvoker) delegate
                     {
                         _searchInfoListView.Items.Add(item);
                     });
@@ -169,56 +200,66 @@ namespace UniSearch
                 //set of the researched url
                 lock (_criticalSection)
                 {
-                    _uniSearch.Invoke((MethodInvoker)delegate
+                    _uniSearch.Invoke((MethodInvoker) delegate
                     {
                         item.Text += currentUrl;
                     });
                 }
-                
+
                 lock (_criticalSection)
                 {
                     scanned.Add(currentUrl);
                 }
 
                 string html = GetHtml(currentUrl);
-                
+
                 html = html.ToLower();
 
                 int coutnConcurrences = Regex.Matches(html, searchString.ToLower()).Count;
 
                 lock (_criticalSection)
                 {
-                    _uniSearch.Invoke((MethodInvoker)delegate
+                    _uniSearch.Invoke((MethodInvoker) delegate
                     {
                         item.Text += @" Concurrences: " + coutnConcurrences;
                     });
                 }
-                
+
                 Regex regex = new Regex(@"https?://[\w\d\-_]+(\.[\w\d\-_]+)+[\w\d\-\.,@?^=%&amp;:/~\+#]*");
 
                 MatchCollection matches = regex.Matches(html);
 
                 lock (_criticalSection)
                 {
-                    nextScan.AddRange(from Match match in matches where !scanned.Contains(match.Value) select match.Value);
+                    nextScan.AddRange(from Match match in matches
+                        where !scanned.Contains(match.Value)
+                        select match.Value);
                 }
             }
             catch (Exception exception)
             {
                 lock (_criticalSection)
                 {
-                    _uniSearch.Invoke((MethodInvoker)delegate
+                    _uniSearch.Invoke((MethodInvoker) delegate
                     {
                         item.Text += @" Search error: " + exception.Message;
                     });
                 }
             }
+            finally
+            {
+                ProgressUp();
+            }
         }
 
         private string GetHtml(string currentUrl)
         {
+            _pauseResetEvent.WaitOne();
+
             string html;
+
             HttpWebRequest request = WebRequest.CreateHttp(currentUrl);
+
             using (WebResponse response = request.GetResponse())
             {
                 Stream stream = response.GetResponseStream();
@@ -236,7 +277,29 @@ namespace UniSearch
                 }
                 stream.Close();
             }
+
             return html;
+        }
+
+        private void ProgressUp()
+        {
+            if (!_isStop)
+            {
+                lock (_criticalSection)
+                {
+                    _uniSearch.Invoke((MethodInvoker) delegate
+                    {
+                        _prorgressBar.Value = _prorgressBar.Value + 1 > _prorgressBar.Maximum
+                            ? _prorgressBar.Maximum
+                            : _prorgressBar.Value + 1;
+                    });
+                }
+            }
+        }
+
+        protected virtual void OnFinishScan()
+        {
+            FinishScan?.Invoke();
         }
     }
 }

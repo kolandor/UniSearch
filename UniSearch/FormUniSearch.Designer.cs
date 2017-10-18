@@ -50,7 +50,7 @@
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.tableLayoutPanelControlButtons = new System.Windows.Forms.TableLayoutPanel();
             this.buttonStartStop = new System.Windows.Forms.Button();
-            this.buttonPause = new System.Windows.Forms.Button();
+            this.buttonPauseResume = new System.Windows.Forms.Button();
             this.menuStrip.SuspendLayout();
             this.tableLayoutPanelMain.SuspendLayout();
             this.tableLayoutPanelInpData.SuspendLayout();
@@ -279,7 +279,7 @@
             this.tableLayoutPanelControlButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanelControlButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 134F));
             this.tableLayoutPanelControlButtons.Controls.Add(this.buttonStartStop, 1, 0);
-            this.tableLayoutPanelControlButtons.Controls.Add(this.buttonPause, 0, 0);
+            this.tableLayoutPanelControlButtons.Controls.Add(this.buttonPauseResume, 0, 0);
             this.tableLayoutPanelControlButtons.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanelControlButtons.Location = new System.Drawing.Point(3, 271);
             this.tableLayoutPanelControlButtons.Name = "tableLayoutPanelControlButtons";
@@ -300,16 +300,17 @@
             this.buttonStartStop.UseVisualStyleBackColor = true;
             this.buttonStartStop.Click += new System.EventHandler(this.buttonStartStop_Click);
             // 
-            // buttonPause
+            // buttonPauseResume
             // 
-            this.buttonPause.Dock = System.Windows.Forms.DockStyle.Right;
-            this.buttonPause.Enabled = false;
-            this.buttonPause.Location = new System.Drawing.Point(226, 3);
-            this.buttonPause.Name = "buttonPause";
-            this.buttonPause.Size = new System.Drawing.Size(128, 22);
-            this.buttonPause.TabIndex = 1;
-            this.buttonPause.Text = "PAUSE";
-            this.buttonPause.UseVisualStyleBackColor = true;
+            this.buttonPauseResume.Dock = System.Windows.Forms.DockStyle.Right;
+            this.buttonPauseResume.Enabled = false;
+            this.buttonPauseResume.Location = new System.Drawing.Point(226, 3);
+            this.buttonPauseResume.Name = "buttonPauseResume";
+            this.buttonPauseResume.Size = new System.Drawing.Size(128, 22);
+            this.buttonPauseResume.TabIndex = 1;
+            this.buttonPauseResume.Text = "PAUSE";
+            this.buttonPauseResume.UseVisualStyleBackColor = true;
+            this.buttonPauseResume.Click += new System.EventHandler(this.buttonPauseResume_Click);
             // 
             // FormUniSearch
             // 
@@ -364,7 +365,7 @@
         private System.Windows.Forms.ProgressBar progressBar;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelControlButtons;
         private System.Windows.Forms.Button buttonStartStop;
-        private System.Windows.Forms.Button buttonPause;
+        private System.Windows.Forms.Button buttonPauseResume;
         private System.Windows.Forms.ListView listViewSearchInfo;
     }
 }

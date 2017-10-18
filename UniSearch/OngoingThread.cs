@@ -3,44 +3,59 @@ using System.Threading;
 
 namespace UniSearch
 {
+    /// <summary>
+    /// Resumed working thread
+    /// </summary>
     sealed class OngoingThread
     {
         private Thread _thread;
-
+        
         private readonly AutoResetEvent _threadStartCotrol;
-
+        
         private readonly AutoResetEvent _userTreadJoinStartCotrol;
-
+        
         private readonly ThreadStart _userMethod;
-
+        
         private readonly ParameterizedThreadStart _parameterizedUserMethod;
-
+        
         private Exception _userThreadException;
-
+        
         private object _userData;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OngoingThread"/> class.
+        /// </summary>
+        /// <param name="userMethod">The user method.</param>
         public OngoingThread(ThreadStart userMethod) : this()
         {
             _userMethod = userMethod;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OngoingThread"/> class.
+        /// </summary>
+        /// <param name="parameterizedUserMethod">The parameterized user method.</param>
         public OngoingThread(ParameterizedThreadStart parameterizedUserMethod) : this()
         {
             _parameterizedUserMethod = parameterizedUserMethod;
         }
-
+        
         private OngoingThread()
         {
             _threadStartCotrol = new AutoResetEvent(false);
             _userTreadJoinStartCotrol = new AutoResetEvent(false);
             ThreadException = null;
         }
-
+        
         ~OngoingThread()
         {
             Stop();
         }
 
+        /// <summary>
+        /// Starts thread.
+        /// </summary>
+        /// <param name="userData">The user data.</param>
         public void Start(object userData = null)
         {
             //create
@@ -58,6 +73,9 @@ namespace UniSearch
             _threadStartCotrol.Set();
         }
 
+        /// <summary>
+        /// Stops thread.
+        /// </summary>
         public void Stop()
         {
             if (_thread != null)
@@ -69,6 +87,9 @@ namespace UniSearch
             }
         }
 
+        /// <summary>
+        /// Joins this thread.
+        /// </summary>
         public void Join()
         {
             if (_thread != null)
@@ -80,6 +101,12 @@ namespace UniSearch
             }
         }
 
+        /// <summary>
+        /// Get state of thread.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is work; otherwise, <c>false</c>.
+        /// </value>
         public bool IsWork
         {
             get
@@ -94,6 +121,12 @@ namespace UniSearch
             }
         }
 
+        /// <summary>
+        /// Gets the thread exception.
+        /// </summary>
+        /// <value>
+        /// The thread exception.
+        /// </value>
         public Exception ThreadException
         {
             get
@@ -104,6 +137,7 @@ namespace UniSearch
             }
             private set { _userThreadException = value; }
         }
+
 
         private void OngoingThreadMethod()
         {

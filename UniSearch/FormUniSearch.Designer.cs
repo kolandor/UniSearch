@@ -31,6 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormUniSearch));
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanelMain = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanelInpData = new System.Windows.Forms.TableLayoutPanel();
             this.textBoxSearchString = new System.Windows.Forms.TextBox();
@@ -51,7 +52,6 @@
             this.tableLayoutPanelControlButtons = new System.Windows.Forms.TableLayoutPanel();
             this.buttonStartStop = new System.Windows.Forms.Button();
             this.buttonPauseResume = new System.Windows.Forms.Button();
-            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.tableLayoutPanelMain.SuspendLayout();
             this.tableLayoutPanelInpData.SuspendLayout();
@@ -67,7 +67,7 @@
             this.fileToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(497, 24);
+            this.menuStrip.Size = new System.Drawing.Size(548, 24);
             this.menuStrip.TabIndex = 0;
             this.menuStrip.Text = "menuStrip";
             // 
@@ -78,6 +78,13 @@
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
+            // 
+            // aboutToolStripMenuItem
+            // 
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+            this.aboutToolStripMenuItem.Text = "About";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // tableLayoutPanelMain
             // 
@@ -97,7 +104,7 @@
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 121F));
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49F));
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 33F));
-            this.tableLayoutPanelMain.Size = new System.Drawing.Size(497, 302);
+            this.tableLayoutPanelMain.Size = new System.Drawing.Size(548, 302);
             this.tableLayoutPanelMain.TabIndex = 1;
             // 
             // tableLayoutPanelInpData
@@ -118,32 +125,32 @@
             this.tableLayoutPanelInpData.RowCount = 2;
             this.tableLayoutPanelInpData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanelInpData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
-            this.tableLayoutPanelInpData.Size = new System.Drawing.Size(491, 46);
+            this.tableLayoutPanelInpData.Size = new System.Drawing.Size(542, 46);
             this.tableLayoutPanelInpData.TabIndex = 0;
             // 
             // textBoxSearchString
             // 
             this.textBoxSearchString.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxSearchString.Location = new System.Drawing.Point(239, 22);
+            this.textBoxSearchString.Location = new System.Drawing.Point(289, 22);
             this.textBoxSearchString.Name = "textBoxSearchString";
-            this.textBoxSearchString.Size = new System.Drawing.Size(249, 20);
+            this.textBoxSearchString.Size = new System.Drawing.Size(250, 20);
             this.textBoxSearchString.TabIndex = 5;
             // 
             // textBoxThreadsCount
             // 
             this.textBoxThreadsCount.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxThreadsCount.Location = new System.Drawing.Point(121, 22);
+            this.textBoxThreadsCount.Location = new System.Drawing.Point(146, 22);
             this.textBoxThreadsCount.Name = "textBoxThreadsCount";
-            this.textBoxThreadsCount.Size = new System.Drawing.Size(112, 20);
+            this.textBoxThreadsCount.Size = new System.Drawing.Size(137, 20);
             this.textBoxThreadsCount.TabIndex = 4;
             // 
             // labelSearchString
             // 
             this.labelSearchString.AutoSize = true;
             this.labelSearchString.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelSearchString.Location = new System.Drawing.Point(239, 0);
+            this.labelSearchString.Location = new System.Drawing.Point(289, 0);
             this.labelSearchString.Name = "labelSearchString";
-            this.labelSearchString.Size = new System.Drawing.Size(249, 19);
+            this.labelSearchString.Size = new System.Drawing.Size(250, 19);
             this.labelSearchString.TabIndex = 3;
             this.labelSearchString.Text = "Search String";
             // 
@@ -151,9 +158,9 @@
             // 
             this.labelThreadsCount.AutoSize = true;
             this.labelThreadsCount.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelThreadsCount.Location = new System.Drawing.Point(121, 0);
+            this.labelThreadsCount.Location = new System.Drawing.Point(146, 0);
             this.labelThreadsCount.Name = "labelThreadsCount";
-            this.labelThreadsCount.Size = new System.Drawing.Size(112, 19);
+            this.labelThreadsCount.Size = new System.Drawing.Size(137, 19);
             this.labelThreadsCount.TabIndex = 2;
             this.labelThreadsCount.Text = "Threads Count";
             // 
@@ -163,7 +170,7 @@
             this.labelSearchCount.Dock = System.Windows.Forms.DockStyle.Fill;
             this.labelSearchCount.Location = new System.Drawing.Point(3, 0);
             this.labelSearchCount.Name = "labelSearchCount";
-            this.labelSearchCount.Size = new System.Drawing.Size(112, 19);
+            this.labelSearchCount.Size = new System.Drawing.Size(137, 19);
             this.labelSearchCount.TabIndex = 0;
             this.labelSearchCount.Text = "URL Search Count";
             // 
@@ -172,7 +179,7 @@
             this.textBoxSearchCount.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textBoxSearchCount.Location = new System.Drawing.Point(3, 22);
             this.textBoxSearchCount.Name = "textBoxSearchCount";
-            this.textBoxSearchCount.Size = new System.Drawing.Size(112, 20);
+            this.textBoxSearchCount.Size = new System.Drawing.Size(137, 20);
             this.textBoxSearchCount.TabIndex = 1;
             // 
             // tableLayoutPanelUrl
@@ -187,7 +194,7 @@
             this.tableLayoutPanelUrl.RowCount = 2;
             this.tableLayoutPanelUrl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 38.63636F));
             this.tableLayoutPanelUrl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 61.36364F));
-            this.tableLayoutPanelUrl.Size = new System.Drawing.Size(491, 40);
+            this.tableLayoutPanelUrl.Size = new System.Drawing.Size(542, 40);
             this.tableLayoutPanelUrl.TabIndex = 1;
             // 
             // labelUrl
@@ -196,7 +203,7 @@
             this.labelUrl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.labelUrl.Location = new System.Drawing.Point(3, 0);
             this.labelUrl.Name = "labelUrl";
-            this.labelUrl.Size = new System.Drawing.Size(485, 15);
+            this.labelUrl.Size = new System.Drawing.Size(536, 15);
             this.labelUrl.TabIndex = 0;
             this.labelUrl.Text = "URL";
             // 
@@ -205,7 +212,7 @@
             this.textBoxUrl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textBoxUrl.Location = new System.Drawing.Point(3, 18);
             this.textBoxUrl.Name = "textBoxUrl";
-            this.textBoxUrl.Size = new System.Drawing.Size(485, 20);
+            this.textBoxUrl.Size = new System.Drawing.Size(536, 20);
             this.textBoxUrl.TabIndex = 1;
             // 
             // tableLayoutPanelScanInfo
@@ -220,7 +227,7 @@
             this.tableLayoutPanelScanInfo.RowCount = 2;
             this.tableLayoutPanelScanInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15.38461F));
             this.tableLayoutPanelScanInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 84.61539F));
-            this.tableLayoutPanelScanInfo.Size = new System.Drawing.Size(491, 115);
+            this.tableLayoutPanelScanInfo.Size = new System.Drawing.Size(542, 115);
             this.tableLayoutPanelScanInfo.TabIndex = 2;
             // 
             // labelSearchInfo
@@ -229,7 +236,7 @@
             this.labelSearchInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.labelSearchInfo.Location = new System.Drawing.Point(3, 0);
             this.labelSearchInfo.Name = "labelSearchInfo";
-            this.labelSearchInfo.Size = new System.Drawing.Size(485, 17);
+            this.labelSearchInfo.Size = new System.Drawing.Size(536, 17);
             this.labelSearchInfo.TabIndex = 0;
             this.labelSearchInfo.Text = "Search Information";
             // 
@@ -238,7 +245,7 @@
             this.listViewSearchInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listViewSearchInfo.Location = new System.Drawing.Point(3, 20);
             this.listViewSearchInfo.Name = "listViewSearchInfo";
-            this.listViewSearchInfo.Size = new System.Drawing.Size(485, 92);
+            this.listViewSearchInfo.Size = new System.Drawing.Size(536, 92);
             this.listViewSearchInfo.TabIndex = 1;
             this.listViewSearchInfo.UseCompatibleStateImageBehavior = false;
             this.listViewSearchInfo.View = System.Windows.Forms.View.Tile;
@@ -255,7 +262,7 @@
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 34.69388F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 65.30612F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(491, 43);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(542, 43);
             this.tableLayoutPanel1.TabIndex = 3;
             // 
             // labelProgress
@@ -264,7 +271,7 @@
             this.labelProgress.Dock = System.Windows.Forms.DockStyle.Fill;
             this.labelProgress.Location = new System.Drawing.Point(3, 0);
             this.labelProgress.Name = "labelProgress";
-            this.labelProgress.Size = new System.Drawing.Size(485, 14);
+            this.labelProgress.Size = new System.Drawing.Size(536, 14);
             this.labelProgress.TabIndex = 0;
             this.labelProgress.Text = "Progress";
             // 
@@ -273,7 +280,7 @@
             this.progressBar.Dock = System.Windows.Forms.DockStyle.Fill;
             this.progressBar.Location = new System.Drawing.Point(3, 17);
             this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(485, 23);
+            this.progressBar.Size = new System.Drawing.Size(536, 23);
             this.progressBar.TabIndex = 1;
             // 
             // tableLayoutPanelControlButtons
@@ -288,14 +295,14 @@
             this.tableLayoutPanelControlButtons.Name = "tableLayoutPanelControlButtons";
             this.tableLayoutPanelControlButtons.RowCount = 1;
             this.tableLayoutPanelControlButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanelControlButtons.Size = new System.Drawing.Size(491, 28);
+            this.tableLayoutPanelControlButtons.Size = new System.Drawing.Size(542, 28);
             this.tableLayoutPanelControlButtons.TabIndex = 4;
             // 
             // buttonStartStop
             // 
             this.buttonStartStop.Dock = System.Windows.Forms.DockStyle.Fill;
             this.buttonStartStop.Enabled = false;
-            this.buttonStartStop.Location = new System.Drawing.Point(360, 3);
+            this.buttonStartStop.Location = new System.Drawing.Point(411, 3);
             this.buttonStartStop.Name = "buttonStartStop";
             this.buttonStartStop.Size = new System.Drawing.Size(128, 22);
             this.buttonStartStop.TabIndex = 0;
@@ -307,7 +314,7 @@
             // 
             this.buttonPauseResume.Dock = System.Windows.Forms.DockStyle.Right;
             this.buttonPauseResume.Enabled = false;
-            this.buttonPauseResume.Location = new System.Drawing.Point(226, 3);
+            this.buttonPauseResume.Location = new System.Drawing.Point(277, 3);
             this.buttonPauseResume.Name = "buttonPauseResume";
             this.buttonPauseResume.Size = new System.Drawing.Size(128, 22);
             this.buttonPauseResume.TabIndex = 1;
@@ -315,18 +322,11 @@
             this.buttonPauseResume.UseVisualStyleBackColor = true;
             this.buttonPauseResume.Click += new System.EventHandler(this.buttonPauseResume_Click);
             // 
-            // aboutToolStripMenuItem
-            // 
-            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.aboutToolStripMenuItem.Text = "About";
-            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
-            // 
             // FormUniSearch
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(497, 326);
+            this.ClientSize = new System.Drawing.Size(548, 326);
             this.Controls.Add(this.tableLayoutPanelMain);
             this.Controls.Add(this.menuStrip);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;

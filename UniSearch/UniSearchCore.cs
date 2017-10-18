@@ -9,33 +9,54 @@ using System.Windows.Forms;
 
 namespace UniSearch
 {
+    /// <summary>
+    /// Core of search
+    /// </summary>
     public class UniSearchCore
     {
         private readonly FormUniSearch _uniSearch;
-
+        
         private readonly ListView _searchInfoListView;
-
-        private readonly ProgressBar _prorgressBar;
-
+        
+        private readonly ProgressBar _progressBar;
+        
         private readonly object _criticalSection = true;
-
+        
         private Thread _mainThread;
-
+        
         private int _targetDeep;
-
+        
         private bool _isStop;
+        
+        private readonly ManualResetEvent _pauseResetEvent;
 
-        private ManualResetEvent _pauseResetEvent;
-
-        public UniSearchCore(FormUniSearch uniSearch, ListView listView, ProgressBar prorgressBar)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UniSearchCore"/> class.
+        /// </summary>
+        /// <param name="uniSearch">The UniSearch Form.</param>
+        /// <param name="listView">The list view out search information.</param>
+        /// <param name="progressBar">The progress bar to show.</param>
+        public UniSearchCore(FormUniSearch uniSearch, ListView listView, ProgressBar progressBar)
         {
+            if (uniSearch == null || listView == null || progressBar == null)
+            {
+                throw new Exception("Not initialized component.");
+            }
+
             _isStop = true;
             _uniSearch = uniSearch;
-            _prorgressBar = prorgressBar;
+            _progressBar = progressBar;
             _searchInfoListView = listView;
             _pauseResetEvent = new ManualResetEvent(true);
         }
 
+        /// <summary>
+        /// Start search process from URL root.
+        /// </summary>
+        /// <param name="urlRoot">The URL root.</param>
+        /// <param name="targetDeep">The target deep. Count of scanned URLs.</param>
+        /// <param name="threadCount">The thread count.</param>
+        /// <param name="searchString">The search string.</param>
         public void Start(string urlRoot, int targetDeep, int threadCount, string searchString)
         {
             _targetDeep = targetDeep;
@@ -48,6 +69,9 @@ namespace UniSearch
             _mainThread.Start(tuple);
         }
 
+        /// <summary>
+        /// Stops search process.
+        /// </summary>
         public void Stop()
         {
             if (_mainThread != null)
@@ -58,18 +82,27 @@ namespace UniSearch
             }
         }
 
+        /// <summary>
+        /// Pauses search process.
+        /// </summary>
         public void Pause()
         {
             _pauseResetEvent.Reset();
         }
 
+        /// <summary>
+        /// Resumes search process.
+        /// </summary>
         public void Resume()
         {
             _pauseResetEvent.Set();
         }
 
+        /// <summary>
+        /// Occurs when [finish scan].
+        /// </summary>
         public event Action FinishScan;
-
+        
         void Process(object objTupleParams)
         {
             List<OngoingThread> poolThreads = null;
@@ -109,7 +142,7 @@ namespace UniSearch
                 {
                     _uniSearch.Invoke((MethodInvoker)delegate
                    {
-                       _prorgressBar.Value = _prorgressBar.Maximum;
+                       _progressBar.Value = _progressBar.Maximum;
                    });
                 }
             }
@@ -119,10 +152,7 @@ namespace UniSearch
             }
             catch (Exception exception)
             {
-                //if (!(Exception is ThreadAbortException))
-                //{
                 MessageBox.Show(exception.Message);
-                //}
             }
             finally
             {
@@ -139,7 +169,7 @@ namespace UniSearch
                 OnFinishScan();
             }
         }
-
+        
         List<string> ScanLevel(List<OngoingThread> poolThreads, List<string> scan, List<string> scanned, string searchString)
         {
             List<string> nextScan = new List<string>();
@@ -167,7 +197,7 @@ namespace UniSearch
 
             return nextScan;
         }
-
+        
         void SearchMethod(object objTupleParams)
         {
             _pauseResetEvent.WaitOne();
@@ -251,7 +281,7 @@ namespace UniSearch
                 ProgressUp();
             }
         }
-
+        
         private string GetHtml(string currentUrl)
         {
             _pauseResetEvent.WaitOne();
@@ -280,7 +310,7 @@ namespace UniSearch
 
             return html;
         }
-
+        
         private void ProgressUp()
         {
             if (!_isStop)
@@ -289,14 +319,14 @@ namespace UniSearch
                 {
                     _uniSearch.Invoke((MethodInvoker) delegate
                     {
-                        _prorgressBar.Value = _prorgressBar.Value + 1 > _prorgressBar.Maximum
-                            ? _prorgressBar.Maximum
-                            : _prorgressBar.Value + 1;
+                        _progressBar.Value = _progressBar.Value + 1 > _progressBar.Maximum
+                            ? _progressBar.Maximum
+                            : _progressBar.Value + 1;
                     });
                 }
             }
         }
-
+        
         protected virtual void OnFinishScan()
         {
             FinishScan?.Invoke();
